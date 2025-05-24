@@ -1,0 +1,75 @@
+import requests
+import random
+import time
+
+# Danh sách nhiều webhook URLs
+webhook_urls = [
+    'https://discord.com/api/webhooks/1374388456561573929/wBMkhqOH-Qrb565Zrh9dwzqaQyyQRLmd-5Df7hgh38Cs2ZgdRPL4wlu2hc1JnnYAUIQU',
+    'https://discord.com/api/webhooks/1374388611415277699/hyZmDc4mEvtmBavH00UszfANSAumMW-_hokdszuimSZHz6IdH-0N3gQ-3KNtbBO16XGe',
+    'https://discord.com/api/webhooks/1374388678662553663/1FtM7gDJTuoUW2D98P-2r8STCoN2Wefx0fzMp6XK2AdwTB09A25e7Pe-PFnQGeGuMUG_'
+    # Thêm nhiều webhook khác vào đây
+]
+
+# ID người dùng và vai trò bạn muốn tag (có thể để rỗng nếu không cần)
+user_ids = ['123456789012345678', '234567890123456789']
+role_ids = ['987654321098765432']
+# Tên và avatar giả
+usernames = ["sever lỏ", "bầy ngu", "bị raid nek con", "gà công nghiệp"]
+avatars = [
+    "https://cdn.discordapp.com/attachments/1354101562989084805/1375515245405012019/IMG_1675.jpg?ex=6831f7e6&is=6830a666&hm=4a595ad859aaff133e6356fe6f5f593cc2b72ca305428794e284128fd505f745&",
+    "https://cdn.discordapp.com/attachments/1354101562989084805/1375515245640028280/IMG_1674.jpg?ex=6831f7e6&is=6830a666&hm=9d0c47ea39925054ffe12e18da83ea660200f2353eab6fa6a17fe16cbb45fc61&", 
+    "https://cdn.discordapp.com/attachments/1354101562989084805/1375515245845418137/IMG_1673.jpg?ex=6831f7e6&is=6830a666&hm=a06937a8abdcc23946e52e1e6ed8eaea8ae061131aae7489b4ae5518847a5f15&",
+    "https://cdn.discordapp.com/attachments/1354101562989084805/1375516497207758998/IMG_1676.jpg?ex=6831f910&is=6830a790&hm=1a040d6d7ceb1e1428a1fea78a6bac53b9473b47ed53b55618dff1431a18044f&"
+]
+# Tiêu đề embed
+titles = ["MẤY CON GÀ", "BỐ MÀY raid", "NGU NHƯ CHÓ", "BỊ NUKE NHÉ"]
+# Nội dung chửi - sẽ gửi TẤT CẢ cùng lúc
+messages = [
+    "chủ sever này là một thằng chó 🐶 🖕🏿🖕🏿🖕🏿🖕🏿🖕🏿🖕🏿",
+    "Server sắp sập mẹ rồi con ơi😂😂😂😂😂😂😂",
+    "chào mấy thằng óc lồn ngu 🤌🏿👈🏿💦",
+    "Ngửi khói chưa mấy con gà công nghiệp 🖕🏿🖕🏿🖕🏿🖕🏿🖕🏿😏",
+    "Mày bị nuke là đáng đời",
+    "haha mấy thằng ngu để sever bị raid 🤓🤓🤓",
+    "Owner server là con gà công nghiệp ngu như dái chó 😎😎😎"
+]
+# Màu sắc embed
+colors = [0xE74C3C, 0x2ECC71, 0xF39C12, 0x9B59B6, 0x3498DB, 0x1ABC9C]
+def send_embed():
+    # Random chọn username, avatar, title, màu
+    username = random.choice(usernames)
+    avatar = random.choice(avatars)
+    title = random.choice(titles)
+    color = random.choice(colors)
+    
+    # Gửi TẤT CẢ tin nhắn cùng lúc (không random)
+    description = "\n".join(messages)
+    
+    # Nội dung hiển thị bên ngoài embed
+    content = "chào mấy con gà công ngiệp ngu lồn óc chó😂😂😂 sever bố mày nek https://discord.gg/euEzQfCc2j \n@everyone <@678344927997853742>"
+    # Payload gửi webhook
+    payload = {
+        "username": username,
+        "avatar_url": avatar,
+        "content": content,
+        "embeds": [
+            {
+                "title": title,
+                "description": description,
+                "color": color
+            }
+        ]
+    }
+    
+    # Gửi đến TẤT CẢ webhook cùng lúc
+    for i, webhook_url in enumerate(webhook_urls):
+        try:
+            response = requests.post(webhook_url, json=payload)
+            print(f"[{response.status_code}] Sent to webhook {i+1} from {username}")
+        except Exception as e:
+            print(f"Lỗi webhook {i+1}: {e}")
+# Gửi 30 lần (mỗi lần gửi đến TẤT CẢ webhook)
+for _ in range(30):
+    send_embed()
+    time.sleep(0.5)  # Delay 0.5 giây giữa các lần gửi
+print("✅ Hoàn thành gửi tin nhắn!")
